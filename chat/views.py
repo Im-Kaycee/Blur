@@ -11,19 +11,23 @@ from datetime import timedelta
 
 @login_required
 def home1(request):
-    # Get all chat groups for the user
-    chat_groups = request.user.chat_groups.all()
+    # Separate group chats and private chats
+    group_chats = ChatGroup.objects.filter(members=request.user, is_private=False)
+    private_chats = ChatGroup.objects.filter(members=request.user, is_private=True)
     
-    # For each chat group, attach the last message
-    for chatroom in chat_groups:
-        # Use the correct relationship and field names
-        last_message = chatroom.chat_messages.order_by('-created').first()
-        chatroom.last_message = last_message
-    
+    # Attach the last group chat message to each group chat
+    for chatroom in group_chats:
+        chatroom.last_message = chatroom.chat_messages.order_by('-created').first()
+
+    # Attach the last private chat message to each private chat
+    for chatroom in private_chats:
+        chatroom.last_message = chatroom.chat_messages.order_by('-created').first()
+
     context = {
-        'chat_groups': chat_groups
+        'group_chats': group_chats,
+        'private_chats': private_chats,
     }
-    
+
     return render(request, 'index.html', context)
 
 @login_required

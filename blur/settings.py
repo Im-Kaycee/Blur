@@ -33,6 +33,7 @@ CSRF_TRUSTED_ORIGINS = [ 'https://*' ]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -138,8 +139,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
+JAZZMIN_SETTINGS = {
+    "show_ui_builder": True,
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
