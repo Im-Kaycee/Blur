@@ -1,0 +1,85 @@
+{% load static %}
+<header class="flex items-center justify-between bg-gray-800 h-20 px-4 md:px-8 text-white sticky top-0 z-40">
+    <!-- Logo -->
+    <div>
+        <a class="flex items-center gap-2" href="/">
+            <img class="h-6" src="{% static 'images/logo.svg' %}" alt="Logo"/>
+            <span class="text-lg font-bold">BLUR</span>
+        </a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="relative">
+        <ul class="flex items-center justify-center h-full space-x-4 md:space-x-6">
+            {% if request.user.is_authenticated %}
+            <!-- DMs Dropdown -->
+            <li x-data="{ dmOpen: false }" class="relative">
+                <a @click="dmOpen = !dmOpen" @click.away="dmOpen = false" class="cursor-pointer flex items-center gap-2">
+                    <img class="w-6" src="https://img.icons8.com/small/32/ffffff/chat.png" alt="DMs" />
+                    <img x-bind:class="dmOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/ffffff/expand-arrow.png" alt="Dropdown" />
+                </a>
+                <div x-show="dmOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-56 p-2 z-20"
+                     x-transition:enter="duration-300 ease-out"
+                     x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                    <ul class="hoverlist">
+                        {% for chatroom in user.chat_groups.all %}
+                        {% if chatroom.groupchat_name%}
+                        <li>
+                            <a class="leading-5 text-right" href="{% url 'chatroom' chatroom.group_name %}">
+                                {{ chatroom.groupchat_name|slice:":30"}}
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% for chatroom in user.chat_groups.all %}
+                            {% if chatroom.is_private %}
+                                {% for member in chatroom.members.all %}
+                                    {% if member != user %}
+                                <li>
+                                    <a href="{% url 'chatroom' chatroom.group_name %}" class="flex items-center gap-2 p-2 hover:bg-gray-200 rounded">
+                                        <img class="w-8 h-8 rounded-full object-cover" src="{{ member.profile.avatar }}" alt="Avatar" />
+                                        <span>{{ member.username }}</span>
+                                    </a>
+                                </li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        
+                            {% empty %}
+                                <li class="text-gray-500 text-sm p-2">No messages yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Profile Dropdown -->
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer flex items-center gap-2">
+                    <img class="h-8 w-8 rounded-full object-cover" src="{{ request.user.profile.avatar }}" alt="Avatar" />
+                    <span class="hidden md:inline">{{ request.user.profile.name }}</span>
+                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/ffffff/expand-arrow.png" alt="Dropdown" />
+                </a>
+                <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                     x-transition:enter="duration-300 ease-out"
+                     x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                    <ul class="hoverlist">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{% url 'profile' %}">My Profile</a></li>
+                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+                        <li><a href="{% url 'new-groupchat' %}">Create Groupchat</a></li>
+                        <li><a href="{% url 'profile-settings' %}">Settings</a></li>
+                        <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                        
+                    </ul>
+                </div>
+            </li>
+            
+            {% else %}
+            <li><a href="{% url 'user_login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}?next={% url 'profile-onboarding' %}">Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

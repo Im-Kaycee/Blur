@@ -1,0 +1,33 @@
+<div id="chat_messages" hx-swap-oob="beforeend">
+<div class="fade-in-out">
+{% include 'chat/chat_message.html' %}
+</div>
+<style>
+    @keyframes fadeInOut {
+       from {
+        opacity: 0; transform: translateY(12px);
+       }
+       to {
+        opacity: 1; transform: translateY(0);
+       }
+    }
+    .fade-in-out {
+        animation: fadeInOut 0.5s ease-in-out;
+    }
+</style>
+
+<script>
+    function scrollToBottom() {
+        const container = document.getElementById('chat_container');
+        container.scrollTop = container.scrollHeight;
+    }
+    
+    // Call scrollToBottom after the message is added
+    scrollToBottom();
+    
+    // Also listen for HTMX swap events
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        scrollToBottom();
+    });
+</script>
+</div>
