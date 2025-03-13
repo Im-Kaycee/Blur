@@ -83,13 +83,8 @@
 
                           <p class="text-gray-600 text-sm mt-1 truncate">
                             {% if chatroom.last_message %}
-                            {% if member != request.user%}
-                              You: 
-                              {{ chatroom.last_message.body|slice:":30" }}
-                              {% else %}
                               {{ chatroom.last_message.author.profile.rotating_id|stringformat:"s"|slice:":5" }}: 
                               {{ chatroom.last_message.body|slice:":30" }}
-                              {% endif %}
 
                             {% else %}
                               No messages yet
