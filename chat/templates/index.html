@@ -32,7 +32,7 @@
 
                 <p class="text-gray-600 text-sm mt-2 truncate">
                   {% if chatroom.last_message %}
-                    {{ chatroom.last_message.author.username }}: 
+                    {{ chatroom.last_message.author.profile.rotating_id|stringformat:"s"|slice:":5" }}: 
                     {{ chatroom.last_message.body|slice:":30" }}
                   {% else %}
                     No messages yet
@@ -78,13 +78,19 @@
                         <img src="{{ member.profile.avatar }}" class="h-12 w-12 rounded-full mr-4" alt="User avatar" />
                         <div class="flex-1">
                           <div class="flex justify-between items-baseline">
-                            <h3 class="font-bold text-lg text-gray-800">{{ member.username }}</h3>
+                            <h3 class="font-bold text-lg text-gray-800">{{ member.profile.rotating_id|stringformat:"s"|slice:":5" }}</h3>
                           </div>
 
                           <p class="text-gray-600 text-sm mt-1 truncate">
                             {% if chatroom.last_message %}
-                              {{ chatroom.last_message.author.username }}: 
+                            {% if member != request.user%}
+                              You: 
                               {{ chatroom.last_message.body|slice:":30" }}
+                              {% else %}
+                              {{ chatroom.last_message.author.profile.rotating_id|stringformat:"s"|slice:":5" }}: 
+                              {{ chatroom.last_message.body|slice:":30" }}
+                              {% endif %}
+
                             {% else %}
                               No messages yet
                             {% endif %}
