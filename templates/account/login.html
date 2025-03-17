@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% trans "Sign In" %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>  <!-- Tailwind CDN -->
+</head>
+<body class="bg-gray-900 text-gray-400 h-screen flex items-center justify-center">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-3xl font-bold mb-4 text-center">{% trans "Sign In" %}</h1>
+
+        {% if not SOCIALACCOUNT_ONLY %}
+            <p class="text-center text-sm text-gray-400 mb-6">
+                {% blocktranslate %}Don't have an account? 
+                <a href="{{ signup_url }}" class="text-emerald-400 hover:underline">Sign up</a> first.
+                {% endblocktranslate %}
+            </p>
+
+            <form method="post" action="{% url 'account_login' %}" class="space-y-4">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+                <input type="hidden" name="next" value="{{ request.GET.next|default:'/' }}">
+                <button type="submit" class="w-full bg-emerald-500 text-white py-2 rounded-lg hover:bg-emerald-600">
+                    {% trans "Sign In" %}
+                </button>
+            </form>
+        {% endif %}
+
+        {% if SOCIALACCOUNT_ENABLED %}
+            <div class="mt-4">
+                {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

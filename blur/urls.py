@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('main.urls')),  # This includes your custom login logic
+    path('accounts/', include('allauth.urls')),
     path('', include('chat.urls')),
     path('profile/', include('users.urls')),
     path('@<username>/', profile_view, name="profile"),
