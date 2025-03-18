@@ -10,7 +10,8 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(User, related_name='chat_groups', blank=True)
     admin = models.ForeignKey(User, related_name= 'groupchats', blank = True, null= True, on_delete=models.SET_NULL)
     is_private = models.BooleanField(default=False)
-
+    deleted = models.BooleanField(default=False)  
+    edited_at = models.DateTimeField(null=True, blank=True)  
     def save(self, *args, **kwargs):
         if not self.group_name:
             self.group_name = shortuuid.uuid()  # Generate a unique ID if missing

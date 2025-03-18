@@ -66,6 +66,9 @@
                      x-transition:enter-end="opacity-100 translate-y-0 scale-100">
                     <ul class="hoverlist">
                         <li><a href="/">Home</a></li>
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                        {% endif %}
                         <li><a href="{% url 'profile' %}">My Profile</a></li>
                         <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
                         <li><a href="{% url 'new-groupchat' %}">Create Groupchat</a></li>

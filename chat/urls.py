@@ -10,6 +10,7 @@ urlpatterns = [
     path('chat/leave/<chatroom_name>', chatroom_leave_view, name="chatroom-leave"),
     path('chat/<str:username>/', get_or_create_chatroom, name='start-chat'),
     path('chat/room/<str:chatroom_name>/', chat_view, name='chatroom'),
-    
+    path('message/delete/<int:message_id>/', delete_message, name='delete_message'), 
+    path('message/edit/<int:message_id>/', edit_message, name='edit_message'),  
 ]
 

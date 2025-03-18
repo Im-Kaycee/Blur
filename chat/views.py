@@ -176,3 +176,33 @@ def chatroom_leave_view(request, chatroom_name):
 
     # If it's a GET request, show the leave confirmation modal
     return render(request, 'chat/partials/modal_chat_leave.html', {'chat_group': chat_group})
+login_required
+def delete_message(request, message_id):
+    message = get_object_or_404(GroupMessage, id=message_id)
+    if message.author != request.user:
+        raise Http404("You do not have permission to delete this message.")
+    
+    if request.method == "POST":
+        message.delete()  
+        messages.success(request, "Message deleted successfully.")
+        return redirect('chatroom', message.group.group_name)
+    
+    return render(request, 'chat/confirm_delete_message.html', {'message': message})
+@login_required
+def edit_message(request, message_id):
+    message = get_object_or_404(GroupMessage, id=message_id)
+    if message.author != request.user:
+        raise Http404("You do not have permission to edit this message.")
+    
+    if request.method == "POST":
+        form = EditMessageForm(request.POST, instance=message)
+        if form.is_valid():
+            edited_message = form.save(commit=False)
+            edited_message.edited_at = timezone.now()
+            edited_message.save()
+            messages.success(request, "Message edited successfully.")
+            return redirect('chatroom', message.group.group_name)
+    else:
+        form = EditMessageForm(instance=message)
+    
+    return render(request, 'chat/edit_message.html', {'form': form, 'message': message})

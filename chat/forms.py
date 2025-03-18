@@ -32,4 +32,11 @@ class ChatRoomEditForm(forms.ModelForm):
                 'class': 'p-4 text-xl font-bold  mb-4',
                 'maxlength':'300',}),
         }
-    
+
+class EditMessageForm(forms.ModelForm):
+    class Meta:
+        model = GroupMessage
+        fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={'placeholder': 'Edit your message here...', 'class': 'p-4 text-black', 'maxlength': 500, 'autofocus': True})
+        }
