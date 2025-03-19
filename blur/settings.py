@@ -100,6 +100,7 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'blur.asgi.application'
+WSGI_APPLICATION = 'blur.wsgi.application'  # Change 'blur' if your project folder is named differently
 
 
 # Database
