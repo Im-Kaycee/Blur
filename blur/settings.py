@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'cloudinary',
+    'cloudinary_storage',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
@@ -139,6 +141,18 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config( 
+  cloud_name = env('CLOUDINARY_CLOUD_NAME'),  
+  api_key = env('CLOUDINARY_API_KEY'),  
+  api_secret = env('CLOUDINARY_API_SECRET')  
+)
+
+# Media Storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
