@@ -1,0 +1,2 @@
+web: daphne -b 0.0.0.0 -p $PORT blur.asgi:application
+worker: celery -A blur worker --loglevel=info
